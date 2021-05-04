@@ -1,4 +1,6 @@
-['remote "ssh_lbgi"']
-    url = ssh://meyer@ssh.lbgi.fr/home/meyer/dvc
+[core]
+    remote = ssh_lbgi
 ['remote "local_backup"']
     url = /tmp/dvcstore
+['remote "ssh_lbgi"']
+    url = ssh://ssh.lbgi.fr/home/meyer/dvc
