@@ -137,6 +137,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
+*.sav
 *.db
 *.xlsx
 *.csv
@@ -144,3 +145,4 @@ cython_debug/
 *.png
 
 !data/.gitkeep 
+!model/.gitkeep 
