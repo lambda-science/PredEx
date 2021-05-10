@@ -143,6 +143,6 @@ cython_debug/
 *.csv
 *.pdf
 *.png
-
+*.list
 !data/.gitkeep 
 !model/.gitkeep 
