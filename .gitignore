@@ -146,4 +146,5 @@ cython_debug/
 *.png
 *.list
 !data/.gitkeep 
-!model/.gitkeep 
+!model/.gitkeep
+*.json
