@@ -16,12 +16,12 @@ dictdiffer==0.8.1
 diskcache==5.2.1
 distro==1.5.0
 dpath==2.0.1
-dulwich==0.20.21
-dvc==2.1.0
+dulwich==0.20.23
+dvc==2.3.0
 et-xmlfile==1.1.0
 flatten-dict==0.3.0
 flufl.lock==3.2
-fsspec==0.9.0
+fsspec==2021.5.0
 ftfy==6.0.1
 funcy==1.15
 future==0.18.2
