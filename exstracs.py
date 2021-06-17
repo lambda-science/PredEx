@@ -35,15 +35,10 @@ relieff.fit(dataFeatures,dataPhenotypes)
 scores = relieff.feature_importances_
 
 #Initialize ExSTraCS Model
-model = ExSTraCS(N=3000,expert_knowledge=scores)
+model = ExSTraCS(learning_iterations=200000,N=5000,expert_knowledge=scores)
 
 trainedModel = model.fit(dataFeatures,dataPhenotypes)
-print("Training Score: ", trainedModel.score(dataFeatures,dataPhenotypes))
-trainedModel.export_iteration_tracking_data("exstracs/iterationData_postfit.csv")
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/fileRulePopulation_postfit.csv",DCAL=False)
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/popData2_postfit.csv")
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/popData3_postfit.csv",RCPopulation=True)
-trainedModel.pickle_model("exstracs/savedModel1_postfit")
+print("Training Score:\n", trainedModel.score(dataFeatures,dataPhenotypes))
 
 # Evalution de la cross-val
 # Shuffle Data (useful for cross validation)
@@ -53,20 +48,13 @@ dataFeatures = np.delete(formatted,-1,axis=1)
 dataPhenotypes = formatted[:,-1]
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=777)
 cross_val_scoring = cross_val_score(trainedModel, dataFeatures, dataPhenotypes, cv=cv, scoring="accuracy", n_jobs=8)
-print("Cross-Validation Scores: ", cross_val_scoring)
+print("Cross-Validation Scores:\n", cross_val_scoring)
 
 train_sizes, train_scores, test_scores = learning_curve(model, dataFeatures, dataPhenotypes, cv=cv, scoring="accuracy", n_jobs=8)
+print("Train-Size:\n", train_sizes)
+print("Train-Score:\n", train_scores)
+print("Test-Score:\n", test_scores)
 
-train_scores_mean = np.mean(train_scores, axis=1)
-test_scores_mean = np.mean(test_scores, axis=1)
-train_scores_std = np.std(train_scores, axis=1)
-test_scores_std = np.std(test_scores, axis=1)
-print("Train-Size:", train_sizes)
-print("Train-Score: ", train_scores_mean)
-print("Test-Score: ", test_scores_mean)
-
-trainedModel.export_iteration_tracking_data("exstracs/iterationData_final.csv")
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/fileRulePopulation_final.csv",DCAL=False)
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/popData2_final.csv")
-trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/popData3_final.csv",RCPopulation=True)
-trainedModel.pickle_model("exstracs/savedModel1_final")
+trainedModel.export_iteration_tracking_data("exstracs/iteration_results.csv")
+trainedModel.export_final_rule_population(headers,classLabel,filename="exstracs/compated_rules.csv",RCPopulation=True)
+trainedModel.pickle_model("exstracs/exstracs_model.model")
