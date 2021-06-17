@@ -32,7 +32,7 @@ relieff.fit(dataFeatures,dataPhenotypes)
 scores = relieff.feature_importances_
 
 #Initialize ExSTraCS Model
-model = ExSTraCS(learning_iterations=200000,N=3000,expert_knowledge=scores)
+model = ExSTraCS(learning_iterations=400000,N=1000,expert_knowledge=scores)
 
 # Model Fit
 trainedModel = model.fit(dataFeatures,dataPhenotypes)
