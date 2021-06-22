@@ -15,6 +15,19 @@ from sklearn.model_selection import learning_curve
 import json
 import os
 
+
+class NpEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NpEncoder, self).default(obj)
+
+
 # Load Data Using Pandas
 N = [500, 1000, 2000, 3000]
 data = pd.read_csv(
@@ -32,7 +45,7 @@ dataPhenotypes_raw = data.iloc[:, 0].values
 label_encoder = LabelEncoder()
 label_encoder = label_encoder.fit(dataPhenotypes_raw)
 dataPhenotypes = label_encoder.transform(dataPhenotypes_raw)
-headers = data.iloc[:, 1:].columns
+headers = data.iloc[:, 1:].columns.to_numpy()
 results_data_plot = {}
 # Get Feature Importance Scores to use as Expert Knowledge (see https://github.com/EpistasisLab/scikit-rebate/ for more details on skrebate package)
 relieff = ReliefF()
@@ -52,11 +65,13 @@ for max_N in N:
     # Model Fit
     trainedModel = model.fit(dataFeatures, dataPhenotypes)
     results_data_plot["name"] = "N" + str(max_N)
-    results_data_plot["training_score"] = trainedModel.score(
-        dataFeatures, dataPhenotypes
+    results_data_plot["training_score"] = float(
+        trainedModel.score(dataFeatures, dataPhenotypes)
     )
     results_data_plot["instance_coverage"] = trainedModel.get_final_instance_coverage()
-    results_data_plot["final_training_acc"] = trainedModel.get_final_training_accuracy()
+    results_data_plot["final_training_acc"] = float(
+        trainedModel.get_final_training_accuracy()
+    )
     results_data_plot[
         "attribute_specificity_list"
     ] = trainedModel.get_final_attribute_specificity_list()
@@ -77,10 +92,6 @@ for max_N in N:
     ] = trainedModel.get_attribute_tracking_scores(dataPhenotypes)
     # Evalution de la cross-val
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=777)
-    cross_val_scoring = cross_val_score(
-        model, dataFeatures, dataPhenotypes, cv=cv, scoring="accuracy", n_jobs=8
-    )
-    results_data_plot["cross_val_scoring"] = cross_val_scoring
 
     # Learning Curve
     train_sizes, train_scores, test_scores = learning_curve(
@@ -94,9 +105,10 @@ for max_N in N:
         os.makedirs(os.path.join("exstracs", results_data_plot["name"]))
 
     save_dir = os.path.join("exstracs", results_data_plot["name"])
+
     # Export Results: training cycle, rule population, model pickle
     with open(os.path.join(save_dir, "results_data_plot.json"), "w") as outfile:
-        json.dump(results_data_plot, outfile)
+        json.dump(results_data_plot, outfile, cls=NpEncoder, indent=4, sort_keys=True)
     trainedModel.export_iteration_tracking_data(
         os.path.join(save_dir, "iteration_results.csv")
     )
