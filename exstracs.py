@@ -78,18 +78,7 @@ for max_N in N:
     results_data_plot[
         "attribute_accuracy_list"
     ] = trainedModel.get_final_attribute_accuracy_list()
-    results_data_plot[
-        "attribute_tracking_sums"
-    ] = trainedModel.get_final_attribute_tracking_sums()
-    results_data_plot[
-        "attribute_coocurrences"
-    ] = trainedModel.get_final_attribute_coocurrences(headers)
-    instanceLabels = []
-    for i in range(dataFeatures.shape[0]):
-        instanceLabels.append(i)
-    results_data_plot[
-        "attribute_tracking_scores"
-    ] = trainedModel.get_attribute_tracking_scores(dataPhenotypes)
+
     # Evalution de la cross-val
     cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=777)
 
