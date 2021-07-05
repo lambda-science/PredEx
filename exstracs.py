@@ -29,15 +29,16 @@ class NpEncoder(json.JSONEncoder):
 
 
 # Load Data Using Pandas
-N = [500, 1000, 2000, 3000]
+# N = [500, 1000, 2000, 3000]
+N = [1000]
 data = pd.read_csv(
-    "data/histo_feature.csv"
+    "data/histo_fake_data.csv"
 )  # REPLACE with your own dataset .csv filename
 classLabel = "conclusion"
-data = data.iloc[:, 9:]
-data = data.drop("datetime", axis=1)
-data = data.drop(data[data["conclusion"] == "OTHER"].index)
-data = data.drop(data[data["conclusion"] == "UNCLEAR"].index)
+# data = data.iloc[:, 9:]
+# data = data.drop("datetime", axis=1)
+# data = data.drop(data[data["conclusion"] == "OTHER"].index)
+# data = data.drop(data[data["conclusion"] == "UNCLEAR"].index)
 dataFeatures = data.iloc[
     :, 1:
 ].values  # DEFINE classLabel variable as the Str at the top of your dataset's action column
@@ -90,6 +91,26 @@ for max_N in N:
     results_data_plot["train_scores"] = train_scores
     results_data_plot["test_scores"] = test_scores
 
+    ######################################################################
+    # Target - Data DF
+    df = pd.read_csv("data/histo_feature.csv")
+    df = df.iloc[:, 9:]
+    # Drop les OTHER pour l'instant (que 3 classes)
+    df = df.drop(df[df["conclusion"] == "OTHER"].index)
+    df = df.drop(df[df["conclusion"] == "UNCLEAR"].index)
+    del df["datetime"]
+    # Enlever les col remplis de NaN ou avec moins de 5 valeur (annotations)
+    df = df.dropna(axis=1, thresh=5)
+    df.fillna(0, inplace=True)
+    df = df.replace({0.25: 1, 0.5: 1, 0.75: 1})
+    # Séparer les features des labels et onehot encoding des labels
+    # NM:2, COM:1, UNCLEAR:4, CNM:0, OTHER:3
+    X_test, Y_test = df.iloc[:, 1:], df.iloc[:, 0]
+    label_encoded_y_test = label_encoder.transform(Y_test)
+    #######################################################################
+
+    results_data_plot["y_predict"] = trainedModel.predict(X_test)
+    results_data_plot["y_true"] = label_encoded_y_test
     if not os.path.exists(os.path.join("exstracs", results_data_plot["name"])):
         os.makedirs(os.path.join("exstracs", results_data_plot["name"]))
 
