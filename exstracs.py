@@ -108,8 +108,7 @@ for max_N in N:
     X_test, Y_test = df.iloc[:, 1:], df.iloc[:, 0]
     label_encoded_y_test = label_encoder.transform(Y_test)
     #######################################################################
-
-    results_data_plot["y_predict"] = trainedModel.predict(X_test)
+    results_data_plot["y_predict"] = trainedModel.predict(X_test.to_numpy())
     results_data_plot["y_true"] = label_encoded_y_test
     if not os.path.exists(os.path.join("exstracs", results_data_plot["name"])):
         os.makedirs(os.path.join("exstracs", results_data_plot["name"]))
