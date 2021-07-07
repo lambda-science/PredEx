@@ -30,7 +30,7 @@ class NpEncoder(json.JSONEncoder):
 
 # Load Data Using Pandas
 # N = [500, 1000, 2000, 3000]
-N = [1000]
+N = [500]
 data = pd.read_csv(
     "data/histo_fake_data.csv"
 )  # REPLACE with your own dataset .csv filename
@@ -58,9 +58,11 @@ for max_N in N:
     model = ExSTraCS(
         learning_iterations=500000,
         N=max_N,
+        nu=2,
         expert_knowledge=scores,
         track_accuracy_while_fit=True,
         random_state=777,
+        attribute_tracking_method="wh",
     )
 
     # Model Fit
@@ -127,4 +129,6 @@ for max_N in N:
         filename=os.path.join(save_dir, "compacted_rules.csv"),
         RCPopulation=True,
     )
-    trainedModel.pickle_model(os.path.join(save_dir, "exstracs_model"))
+    trainedModel.pickle_model(os.path.join(save_dir, "exstracs_model_preRC"))
+    trainedModel.post_training_rule_compaction()
+    trainedModel.pickle_model(os.path.join(save_dir, "exstracs_model_postRC"))
