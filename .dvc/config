@@ -3,4 +3,6 @@
 ['remote "local_backup"']
     url = /tmp/dvcstore
 ['remote "ssh_lbgi"']
+    user = meyer
     url = ssh://ssh.lbgi.fr/home/meyer/dvc
+    ask_password = true
