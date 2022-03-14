@@ -148,4 +148,4 @@ cython_debug/
 !data/.gitkeep 
 !model/.gitkeep
 *.json
-exstracs/*
+exstracs
