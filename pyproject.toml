@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "PredEx"
+version = "0.1.0"
+description = "Repo for LCS exploring the data"
+authors = ["Corentin Meyer <corentin.meyer@etu.unsitra.fr>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^1.4.1"
+matplotlib = "^3.5.1"
+numpy = "^1.22.3"
+scikit-learn = "^1.0.2"
+skrebate = "^0.62"
+scikit-ExSTraCS = "^1.0.8"
+pylint = "^2.12.2"
+black = "^22.1.0"
+ipykernel = "^6.9.1"
+pyvis = "^0.1.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
