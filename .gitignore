@@ -148,5 +148,5 @@ cython_debug/
 !data/.gitkeep 
 !model/.gitkeep
 *.json
-exstracs
-mlpipe
+AutoML-Pipe
+PredEx
